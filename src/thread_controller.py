@@ -1,12 +1,12 @@
 from threading import Event, Semaphore, Thread
+from src.timer import Timer
 
 
-class Controller:
-    def __init__(self, model, view):
+class ThreadController:
+    def __init__(self):
         self.event = Event()
         self.semaphore = Semaphore()
-        self.model = model
-        self.view = view
+        self.counter = 0
 
     def new_timer(self, time, use_semaphore=False):
         if self.event.is_set():
@@ -15,12 +15,13 @@ class Controller:
         thread.start()
 
     def __create_timer(self, time, use_semaphore):
+        self.counter += 1
         if not use_semaphore:
-            self.model.timer(time, self.event)
+            Timer(self.counter, time, self.event)
         else:
             try:
                 self.semaphore.acquire()
-                self.model.timer(time, self.event)
+                Timer(self.counter, time, self.event)
             finally:
                 self.semaphore.release()
 
