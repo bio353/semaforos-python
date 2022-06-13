@@ -1,5 +1,5 @@
 import tkinter as tk
-from thread_controller import ThreadController
+from src.thread_controller import ThreadController
 from src.ui import UserInterface
 from src.utils import *
 
